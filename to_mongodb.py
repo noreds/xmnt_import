@@ -2,7 +2,8 @@ from pymongo import MongoClient
 import os
 import json
 
-client = MongoClient('mongodb://hans:noooz@52.59.186.178:27017/')
+#client = MongoClient('mongodb://hans:noooz@52.59.186.178:27017/')
+client = MongoClient('mongodb://hans:noooz@localhost:27017/')
 imported_db = client['news']
 imported_collection = imported_db['imported']
 

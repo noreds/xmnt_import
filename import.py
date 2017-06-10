@@ -37,14 +37,13 @@ def on_message(client, userdata, msg):
         news = json.loads(msg.payload.decode('utf-8'))
         source = news.get('source', 'no-source')
         text = news.get('item', {}).get('fullText', '')
-        text = parse.unquote(text)
-        #print(json.dumps(news, indent=2))
+        news['item']['fullText'] = parse.unquote(text)
 
         print(source)
         print(text)
         filename = '%s_%s.json' % (source, time.time())
         with open(os.path.join(imported_news, filename), 'w+') as f:
-            json.dump({'source': source, 'text': text}, f, ensure_ascii=False)
+            json.dump(news, f, ensure_ascii=False)
 
     except Exception as e:
         print('%s' % e)
