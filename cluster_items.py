@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from pymongo import errors as pymongo_errors
 import os
 import json
 
@@ -19,9 +18,6 @@ for fn in os.listdir(imported_news):
             #print(parse.unquote(d['text']))
 
         if d:
-            try:
-                news_id = imported_collection.insert(d)
-            except pymongo_errors.DuplicateKeyError:
-                print('item %s exists' % d['_id'])
+            news_id = imported_collection.insert(d)
+            print('inserted %s' % news_id)
 
-            print('inserted %s' % d['_id'])
