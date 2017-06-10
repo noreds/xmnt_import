@@ -19,9 +19,11 @@ for fn in os.listdir(imported_news):
             #print(parse.unquote(d['text']))
 
         if d:
+            send = True
             try:
-                news_id = imported_collection.insert(d)
+                news_id = imported_collection.insert(d, check_keys=False)
+                print('inserted %s' % d['_id'])
             except pymongo_errors.DuplicateKeyError:
                 print('item %s exists' % d['_id'])
 
-            print('inserted %s' % d['_id'])
+
