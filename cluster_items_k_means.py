@@ -49,7 +49,7 @@ for fn in os.listdir(imported_news):
                                        'item': d}
 
 from numpy import array
-from scipy.cluster.vq import vq, kmeans, whiten
+from scipy.cluster.vq import vq, kmeans2, whiten
 
 all_bin_tags = []
 
@@ -67,10 +67,24 @@ whitened = whiten(features)
 
 # book = array((whitened[0],whitened[2]))  # should be the k guess (fixed to 20 because was 2)
 
-print(len(kmeans(whitened, 20)[0]))
+#print(len(kmeans(whitened, 20)[0]))
 
-for centroid in (kmeans(whitened, 20)[0]):
-    print(centroid)
+centroids, labels = kmeans2(whitened, 200)
+#print('!!!!!!!!!!!!! %s' % len(centroids))
+
+
+clustered_items = {}
+
+for num in range(len(labels)):
+    label = labels[num]
+    if not clustered_items.get(label, False):
+        clustered_items[label] = [item]
+    else:
+        clustered_items[label].append(item)
+
+for cluster in clustered_items.values():
+    print(len(cluster))
+
 
 print('_____________')
 #print(all_tags.items())
