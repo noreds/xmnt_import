@@ -49,17 +49,18 @@ def on_message(client, userdata, msg):
     except Exception as e:
         print('%s' % e)
 
+if __name__ == '__main__':
 
-mqttc = paho.Client()
-mqttc.on_connect = on_connect
-mqttc.on_message = on_message
+    mqttc = paho.Client()
+    mqttc.on_connect = on_connect
+    mqttc.on_message = on_message
 
-mqttc.tls_set(caPath,
-              certfile=certPath,
-              keyfile=keyPath,
-              cert_reqs=ssl.CERT_REQUIRED,
-              tls_version=ssl.PROTOCOL_TLSv1_2,
-              ciphers=None)
+    mqttc.tls_set(caPath,
+                  certfile=certPath,
+                  keyfile=keyPath,
+                  cert_reqs=ssl.CERT_REQUIRED,
+                  tls_version=ssl.PROTOCOL_TLSv1_2,
+                  ciphers=None)
 
-mqttc.connect(awshost, awsport, keepalive=60)
-mqttc.loop_forever()
+    mqttc.connect(awshost, awsport, keepalive=60)
+    mqttc.loop_forever()
