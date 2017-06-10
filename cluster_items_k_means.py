@@ -2,8 +2,8 @@ from pymongo import MongoClient
 import os
 import json
 
-# client = MongoClient('mongodb://hans:noooz@52.59.186.178:27017/')
-client = MongoClient('mongodb://hans:noooz@localhost:27017/')
+client = MongoClient('mongodb://hans:noooz@52.59.186.178:27017/')
+# client = MongoClient('mongodb://hans:noooz@localhost:27017/')
 imported_db = client['news']
 imported_collection = imported_db['imported']
 
@@ -13,9 +13,7 @@ all_tags_with_items = {}
 
 items = {}
 
-import gensim, logging
-
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+untranslated = imported_news.find({'item.text_en': {'$exists': True}})
 
 for fn in os.listdir(imported_news):
     filename = os.path.join(imported_news, fn)
@@ -48,15 +46,17 @@ for fn in os.listdir(imported_news):
                     items[d['_id']] = {'tags': item_tags,
                                        'item': d}
 
+## clustering by tags
+
 from numpy import array
 from scipy.cluster.vq import vq, kmeans2, whiten
 
 all_bin_tags = []
 
 for item in items.values():
-    #print(item)
+    # print(item)
     binary_tags = [1 if x in item['tags'] else 0 for x in all_tags_with_items.keys()]
-    #print(binary_tags)
+    # print(binary_tags)
     print('items bin tags: %s' % len(binary_tags))
     all_bin_tags.append(binary_tags)
 
@@ -67,12 +67,7 @@ whitened = whiten(features)
 
 # book = array((whitened[0],whitened[2]))  # should be the k guess (fixed to 20 because was 2)
 
-#print(len(kmeans(whitened, 20)[0]))
-
 centroids, labels = kmeans2(whitened, 200)
-#print('!!!!!!!!!!!!! %s' % len(centroids))
-
-
 clustered_items = {}
 
 for num in range(len(labels)):
@@ -85,6 +80,4 @@ for num in range(len(labels)):
 for cluster in clustered_items.values():
     print(len(cluster))
 
-
-print('_____________')
-#print(all_tags.items())
+# print(all_tags.items())
