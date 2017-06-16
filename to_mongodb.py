@@ -4,7 +4,7 @@ import os
 import json
 
 settings = json.load(open('settings.json'))
-client = MongoClient('mongodb://'+settings['mongo']['url']+':27017/')
+client = MongoClient('mongodb://test:nooztest@ds123182.mlab.com:23182/news')
 
 imported_news = 'imported'
 
@@ -29,12 +29,16 @@ for fn in os.listdir(imported_news):
     if os.path.isfile(filename):
         d = None
         with open(filename, 'r') as f:
-            d = json.load(f)
-            #print(parse.unquote(d['text']))
-
+            try:
+                d = json.load(f)
+                #print(parse.unquote(d['text']))
+            except UnicodeDecodeError:
+                print('Problems with parsing. Filename:'+filename)
         if d:
             send = True
-            news_id = imported_collection.insert(d, check_keys=False)
-            print('inserted %s' % d['_id'])
-
+            try:
+                news_id = imported_collection.insert(d, check_keys=False)
+                print('inserted %s' % d['_id'])
+            except pymongo_errors.DuplicateKeyError:
+                continue
 
