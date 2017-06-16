@@ -4,7 +4,7 @@ import os
 import json
 
 settings = json.load(open('settings.json'))
-client = MongoClient('mongodb://test:nooztest@ds123182.mlab.com:23182/news')
+client = MongoClient('mongodb://'+settings['mongo']['url']+':27017/')
 
 imported_news = 'imported'
 
