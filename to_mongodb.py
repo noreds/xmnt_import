@@ -4,7 +4,7 @@ import os
 import json
 
 settings = json.load(open('settings.json'))
-client = MongoClient('mongodb://'+settings['mongo']['url']+':27017/')
+client = MongoClient('mongodb://test:nooztest2@ds123182.mlab.com:23182/news')
 
 imported_news = 'imported'
 
@@ -12,7 +12,7 @@ imported_news = 'imported'
 try:
     client['news']
 except IndexError:
-    client['news'].create_database('news')
+    client.create_database('news')
 
 imported_db = client['news']
 
