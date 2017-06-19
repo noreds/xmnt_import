@@ -20,7 +20,7 @@ imported_db = client['news']
 try:
     imported_db[imported_news]
 except IndexError:
-    imported_db[imported_news].create_collection(imported_news)
+    imported_db.create_collection(imported_news)
 
 imported_collection = imported_db[imported_news]
 
